@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MediTrack Pro - Modern Inventory Management</title>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <meta name="theme-color" content="#ffffff" id="themeColor">
+</head>
+<body class="light">
+    <div id="app">
+        <!-- Header Component -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1>MediTrack Pro</h1>
+                <div class="header-actions">
+                    <button id="themeToggle" class="btn icon-btn" aria-label="Toggle theme">
+                        <svg class="theme-icon" viewBox="0 0 24 24" width="24" height="24">
+                            <path class="sun-icon" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            <path class="moon-icon" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+                    <button id="lowStockBtn" class="btn warning">Low Stock</button>
+                </div>
+            </div>
+            <div class="search-bar">
+                <input type="search" id="searchInput" placeholder="Search medicines..." class="search-input">
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div id="medicineGrid" class="medicine-grid"></div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-view="grid">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"></path>
+                </svg>
+                <span>Inventory</span>
+            </button>
+            <button class="nav-btn" data-view="stats">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                <span>Stats</span>
+            </button>
+            <button id="addMedicineBtn" class="nav-btn fab">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M12 4v16m8-8H4"></path>
+                </svg>
+            </button>
+            <button class="nav-btn" data-view="settings">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span>Settings</span>
+            </button>
+        </nav>
+
+        <!-- Add/Edit Medicine Sheet -->
+        <div id="medicineSheet" class="bottom-sheet">
+            <div class="sheet-content">
+                <div class="sheet-header">
+                    <h2 id="sheetTitle">Add Medicine</h2>
+                    <div class="sheet-header-actions">
+                        <button class="btn secondary close-sheet">Cancel</button>
+                    </div>
+                </div>
+                <form id="medicineForm" class="sheet-body">
+                    <div class="form-group">
+                        <label for="medicineName">Medicine Name</label>
+                        <input type="text" id="medicineName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="medicineQuantity">Quantity</label>
+                        <input type="number" id="medicineQuantity" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="medicineExpiry">Expiry Date</label>
+                        <input type="date" id="medicineExpiry" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn primary full-width">Save Medicine</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Low Stock Sheet -->
+        <div id="lowStockSheet" class="bottom-sheet">
+            <div class="sheet-content">
+                <div class="sheet-header">
+                    <h2>Low Stock Alert</h2>
+                    <div class="sheet-header-actions">
+                        <button class="btn secondary close-sheet">Close</button>
+                    </div>
+                </div>
+                <div id="lowStockList" class="sheet-body"></div>
+            </div>
+        </div>
+
+        <!-- Stats View -->
+        <div id="statsView" class="view-container" style="display: none;">
+            <div class="stats-grid">
+                <div class="stat-card total-medicines">
+                    <h3>Total Medicines</h3>
+                    <p id="totalMedicines">0</p>
+                </div>
+                <div class="stat-card low-stock">
+                    <h3>Low Stock</h3>
+                    <p id="lowStockCount">0</p>
+                </div>
+                <div class="stat-card expiring">
+                    <h3>Expiring Soon</h3>
+                    <p id="expiringCount">0</p>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="stockChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Settings View -->
+        <div id="settingsView" class="view-container" style="display: none;">
+            <div class="settings-list">
+                <div class="settings-group">
+                    <h3>Data Management</h3>
+                    <button id="exportDataBtn" class="settings-btn">
+                        <span>Export Data</span>
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                    </button>
+                    <button id="importDataBtn" class="settings-btn">
+                        <span>Import Data</span>
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                        </svg>
+                    </button>
+                    <input type="file" id="importDataInput" accept=".json" style="display: none">
+                </div>
+                <div class="settings-group">
+                    <h3>Preferences</h3>
+                    <div class="settings-item">
+                        <span>Dark Mode</span>
+                        <button id="darkModeToggle" class="toggle-btn">
+                            <span class="toggle-slider"></span>
+                        </button>
+                    </div>
+                    <div class="settings-item">
+                        <span>Notifications</span>
+                        <button id="notificationToggle" class="toggle-btn">
+                            <span class="toggle-slider"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Container -->
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+
+    <script type="module" src="/assets/js/app.js"></script>
+</body>
+</html>
